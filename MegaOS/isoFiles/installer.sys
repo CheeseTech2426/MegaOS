@@ -1,0 +1,11 @@
+{0}\sys\registry.mreg
+{0}\sys\shell.mreg
+{0}\usr\users.sys
+{0}\usr\users.mreg
+{0}\sound\startup.snd
+{0}\sound\shutdown.snd
+{0}\sound\warning.snd
+{0}\sound\error.snd
+{0}\sound\beep.snd
+{0}\sound\crash.snd
+{0}\version.sys

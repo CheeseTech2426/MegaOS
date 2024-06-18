@@ -1,0 +1,12 @@
+D:\Coding\Visual Studio 2019\MegaOS\MegaOS\bin\Debug\net6.0\MegaOS.deps.json
+D:\Coding\Visual Studio 2019\MegaOS\MegaOS\bin\Debug\net6.0\MegaOS.dll
+D:\Coding\Visual Studio 2019\MegaOS\MegaOS\bin\Debug\net6.0\MegaOS.pdb
+D:\Coding\Visual Studio 2019\MegaOS\MegaOS\obj\Debug\net6.0\MegaOS.csproj.AssemblyReference.cache
+D:\Coding\Visual Studio 2019\MegaOS\MegaOS\obj\Debug\net6.0\MegaOS.GeneratedMSBuildEditorConfig.editorconfig
+D:\Coding\Visual Studio 2019\MegaOS\MegaOS\obj\Debug\net6.0\MegaOS.AssemblyInfoInputs.cache
+D:\Coding\Visual Studio 2019\MegaOS\MegaOS\obj\Debug\net6.0\MegaOS.AssemblyInfo.cs
+D:\Coding\Visual Studio 2019\MegaOS\MegaOS\obj\Debug\net6.0\MegaOS.csproj.CoreCompileInputs.cache
+D:\Coding\Visual Studio 2019\MegaOS\MegaOS\obj\Debug\net6.0\MegaOS.dll
+D:\Coding\Visual Studio 2019\MegaOS\MegaOS\obj\Debug\net6.0\refint\MegaOS.dll
+D:\Coding\Visual Studio 2019\MegaOS\MegaOS\obj\Debug\net6.0\MegaOS.pdb
+D:\Coding\Visual Studio 2019\MegaOS\MegaOS\obj\Debug\net6.0\ref\MegaOS.dll

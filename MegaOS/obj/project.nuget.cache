@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "dgSpecHash": "ypZuJngr0cKUmP54d8qG25m6iWFuBYV7dNthpGcZ2BVg3x3iTY37F1SE2CLj/NaWJWxP+R9ChNI4N9VlDCEYTA==",
+  "success": true,
+  "projectFilePath": "D:\\Coding\\Visual Studio 2019\\MegaOS\\MegaOS\\MegaOS.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Eelis Louko\\.nuget\\packages\\cosmos.build\\0.1.0-localbuild20240130065916\\cosmos.build.0.1.0-localbuild20240130065916.nupkg.sha512",
+    "C:\\Users\\Eelis Louko\\.nuget\\packages\\cosmos.common\\0.1.0-localbuild20240130065925\\cosmos.common.0.1.0-localbuild20240130065925.nupkg.sha512",
+    "C:\\Users\\Eelis Louko\\.nuget\\packages\\cosmos.core\\0.1.0-localbuild20240130065925\\cosmos.core.0.1.0-localbuild20240130065925.nupkg.sha512",
+    "C:\\Users\\Eelis Louko\\.nuget\\packages\\cosmos.debug.kernel\\0.1.0-localbuild20240130065925\\cosmos.debug.kernel.0.1.0-localbuild20240130065925.nupkg.sha512",
+    "C:\\Users\\Eelis Louko\\.nuget\\packages\\cosmos.hal2\\0.1.0-localbuild20240130065925\\cosmos.hal2.0.1.0-localbuild20240130065925.nupkg.sha512",
+    "C:\\Users\\Eelis Louko\\.nuget\\packages\\cosmos.plugs\\0.1.0-localbuild20240130065925\\cosmos.plugs.0.1.0-localbuild20240130065925.nupkg.sha512",
+    "C:\\Users\\Eelis Louko\\.nuget\\packages\\cosmos.system2\\0.1.0-localbuild20240130065925\\cosmos.system2.0.1.0-localbuild20240130065925.nupkg.sha512",
+    "C:\\Users\\Eelis Louko\\.nuget\\packages\\il2cpu.api\\0.1.0-localbuild20240130065925\\il2cpu.api.0.1.0-localbuild20240130065925.nupkg.sha512"
+  ],
+  "logs": []
+}

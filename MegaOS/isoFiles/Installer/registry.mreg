@@ -1,0 +1,10 @@
+[MEGAOS]
+version=1.0
+issetupcompleted=false
+[SOUND]
+startup=0:\MegaOS\sound\startup.snd
+shutdown=0:\MegaOS\sound\shutdown.snd
+warning=0:\MegaOS\sound\warning.snd
+beep=0:\MegaOS\sound\beep.snd
+error=0:\MegaOS\sound\error.snd
+crash=0:\MegaOS\sound\crash.snd
