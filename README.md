@@ -9,6 +9,7 @@ A powerful OS written in C# using the COSMOS framework
 - Basic file system
 - Neofetch clone
 - Crash screen
+- Text editor
 
 # Coming soon
 - Interpreted scripting language
