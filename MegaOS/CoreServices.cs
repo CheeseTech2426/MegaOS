@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MegaOS {
     internal class CoreServices {
-        public static string fullVersionString = "MegaOS Nova v1.0";
+        public static string fullVersionString = $"MegaOS ";
         public void Log(string message, LogType type, bool playSound = true) {
             switch (type) {
                 case LogType.Info:
@@ -70,17 +71,21 @@ namespace MegaOS {
             Console.BackgroundColor = oldBG;
         }
 
+        public static void Setup() {
+            fullVersionString = $"MegaOS {Kernel.registry.GetValue("MEGAOS", "versionname")} {Kernel.registry.GetValue("MEGAOS", "version")}";
+        }
 
         public void CheckSystem(bool bypassCheck = false) {
-            GL.WriteLine("Please insert your MegaOS install CD into drive 1...");
+            if(!bypassCheck)GL.WriteLine("Please insert your MegaOS install CD into drive 1...");
             Console.ReadKey(true);
             if (!Directory.Exists(@"1:\") && !bypassCheck) {
                 CheckSystem();
             }
             CopyFiles(2);
+
         }
 
-        public static void Installer(string user, string password) {
+        public static void Installer(string user, string password, string pcname) {
             CoreServices core = new CoreServices();
             // ui
             GL.Clear();
@@ -94,8 +99,6 @@ namespace MegaOS {
             Directory.CreateDirectory(@"0:\MegaOS\");
             CopyFiles(0);
 
-            core.Log($@"Copied installer.sys to 0:\MegaOS\sys\", LogType.OK, false);
-
             core.Log("Files copied successfully!", LogType.OK, false);
             // users
             core.Log("Creating users....", LogType.Info, false);
@@ -104,7 +107,11 @@ namespace MegaOS {
             // registry
             core.Log("Checking registry", LogType.Info, false);
             Kernel.registry = new Registry();
-            Kernel.registry.CheckRegistry(Kernel.registry.registry, @"1:\Installer\registry.mreg");
+            core.Log("Writing registry...", LogType.Info);
+            File.WriteAllLines(Kernel.registry.registry, defaultRegistry);
+            CMDChangeLineInFile ch = new CMDChangeLineInFile("ch", "ch");
+            string[] args = { Kernel.registry.registry, "3", $"pcname={pcname}" };
+            ch.execute(args);
             // complete
             core.Log("Installation complete! Press any key to reboot...", LogType.OK, false);
             Console.ReadKey(true);
@@ -113,7 +120,9 @@ namespace MegaOS {
 
         public static string[] defaultRegistry = {
             "[MEGAOS]",
-            @"version=1.0",
+            @"version=1.1",
+            @"versionname=Nova",
+            @"pcname=megaos",
             @"[SOUND]",
             @"startup=0:\MegaOS\sound\startup.snd",
             @"shutdown = 0:\MegaOS\sound\shutdown.snd",
@@ -164,9 +173,7 @@ namespace MegaOS {
                         }
                     } else {
                         if (File.Exists(sourceFile)) {
-                            core.Log("Running cp...", LogType.OK);
                             File.Copy(sourceFile, destinationPath, true);
-                            core.Log($"Copied {fileName} to {destinationPath}", LogType.OK, false);
                         } else {
                             core.Log($"Source file not found: {sourceFile}. Press any key to continue...", LogType.Error);
                             Console.ReadKey(true);
@@ -177,46 +184,6 @@ namespace MegaOS {
             } catch (Exception ex) {
                 core.Log($"Error during installation: {ex.Message}",LogType.PanicGraphical);
             }
-        }
-
-        private static bool CheckVersion() {
-            if (File.Exists(@"0:\MegaOS\sys\version.sys")) {
-                string[] ver1 = File.ReadAllText(@"0:\MegaOS\sys\version.sys").Split("=");
-                string[] ver2 = File.ReadAllText(@"1:\Installer\version.sys").Split("=");
-                if (ver1[1] != ver2[1]) {
-                    char first1 = ver1[1][0];
-                    char first2 = ver2[1][0];
-                    if (int.TryParse(first1.ToString(), out int a)) {
-                        if (int.TryParse(first2.ToString(), out int b)) {
-                            if (a > b) {
-                                GL.WriteLine("Installed version is newer. Continue with installation? (y/N) ");
-                                ConsoleKeyInfo key = Console.ReadKey(true);
-                                if (key.Key != ConsoleKey.Y) { Cosmos.System.Power.Reboot(); } else {
-                                    return false;
-                                }
-                            } else {
-                                GL.WriteLine("Installed version is older. Upgrade? (y/N) ");
-                                ConsoleKeyInfo key = Console.ReadKey(true);
-                                if (key.Key != ConsoleKey.Y) {
-                                    Directory.Delete(@"0:\MegaOS\");
-                                    return false;
-                                } else {
-                                    return true;
-                                }
-                            }
-                        } else {
-                            return false;
-                        }
-                    } else {
-                        return false;
-                    }
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-            return false;
         }
     }
 }

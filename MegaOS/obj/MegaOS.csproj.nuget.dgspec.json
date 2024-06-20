@@ -73,6 +73,10 @@
               "noWarn": [
                 "NU1604"
               ]
+            },
+            "CosmosHttp": {
+              "target": "Package",
+              "version": "[1.0.4, )"
             }
           },
           "imports": [

@@ -13,6 +13,7 @@ namespace MegaOS {
 
         string username;
         string password;
+        string pcname;
 
         public void Run(bool check = true) {
             if (Directory.Exists(@"0:\MegaOS\") && check) return;
@@ -27,8 +28,21 @@ namespace MegaOS {
             askname();
             GL.Write(2, 8, "Okay! Now let's choose an Administrator password!", ConsoleColor.White, ConsoleColor.Black);
             askpassword();
+            GL.Write(2, 13, "Got it! One more question:", ConsoleColor.White, ConsoleColor.Black);
+            askpcname();
             GL.WriteLine("\n");
-            CoreServices.Installer(username, password);
+            CoreServices.Installer(username, password, pcname);
+        }
+
+        private void askpcname() {
+            GL.Write(2, 14, "PC name: ", ConsoleColor.White, ConsoleColor.Black);
+            GL.SetCursor("PC name: ".Length + 2, 14);
+            pcname = Console.ReadLine();
+            if (string.IsNullOrEmpty(pcname)) {
+                askpcname();
+            }
+
+
         }
 
         private void askname() {

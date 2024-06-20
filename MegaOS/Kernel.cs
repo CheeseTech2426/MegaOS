@@ -38,31 +38,37 @@ namespace MegaOS
                 vfs = new CosmosVFS();
                 VFSManager.RegisterVFS(vfs);
                 core.Log("VFS Registered successfully!", LogType.OK);
+
                 OOBE oobe = new OOBE();
                 oobe.Run();
+
                 core.Log("Starting registry....", LogType.Info);
                 registry = new Registry();
                 registry.CheckRegistry();
+
                 Console.WriteLine("Recovery mode (y/N) ");
                 ConsoleKeyInfo k = Console.ReadKey(true);
                 if (k.Key == ConsoleKey.Y) {
                     recoverymode();
                 }
 
-                if (Directory.Exists(@"1:\")) core.CheckSystem(true);
-
                 core.Log("Loading users....", LogType.Info);
                 user = new UserManager();
                 user.LoadUsers();
+
                 core.Log("Running Taskman...", LogType.Info);
                 taskman = new TaskManager();
+
                 core.Log("Starting GL...", LogType.Info);
+                GL.Setup();
+
                 path = @"0:\";
-                pcname = "megaos";
-                core.Log("Starting Command Manager...", LogType.Info);
+                pcname = registry.GetValue("MEGAOS","pcname");
+
+                core.Log("Starting Command Manager...", LogType.Info);  
                 cm = new CMDManager();
                 keyPresses = new List<char>(); // real important
-                GL.Setup();
+                CoreServices.Setup();
                 user.Login();
                 GL.DrawBar();
                 GL.WriteLine();
@@ -110,7 +116,7 @@ namespace MegaOS
             Cosmos.Core.Memory.Heap.Collect();
             oldDate = date;
         }
-        string BuildString(List<char> key) {
+        public static string BuildString(List<char> key) {
             StringBuilder sb = new StringBuilder();
             foreach (char k in key) {
                 sb.Append(k);

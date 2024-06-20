@@ -13,6 +13,7 @@ namespace MegaOS {
         public static ConsoleColor Bar;
         public static ConsoleColor BarHighlight;
         public static ConsoleColor BarDropdownMenu;
+        public static ConsoleColor DialogTop;
 
         private static ConsoleColor _foreground;
         private static ConsoleColor _background;
@@ -26,6 +27,7 @@ namespace MegaOS {
             Bar = ConsoleColor.Blue;
             BarHighlight = ConsoleColor.White;
             BarDropdownMenu = ConsoleColor.Blue;
+            DialogTop = ConsoleColor.Blue;
         }
 
         public static void Write(string t = "") {
@@ -112,8 +114,10 @@ namespace MegaOS {
             RestoreBG();
         }
 
-        public static List<int> DrawMenuBarOptions(string[] menu, int idx, int x = 0, int y = 1) {
+        public static List<int> DrawMenuBarOptions(string[] menu, int idx, int x = 0, int y = 1, bool restore = false) {
             List<int> xpos = new List<int>();
+            (int x1, int y1) = (0,0);
+            if(restore) (x1, y1) = GetCursor();
             SetCursor(x, y);
             int i = 0;
             foreach (string s in menu) {
@@ -125,7 +129,16 @@ namespace MegaOS {
                 xpos.Add(GetCursor().x - $" {s} ".Length);
                 i++;
             }
+            if (restore) SetCursor(x1, y1);
             return xpos;
+        }
+
+        public static void DrawTitleBar(string title) {
+            (int x, int y) = GetCursor();
+            Write(new string(' ', Width), ConsoleColor.Green, ConsoleColor.Green);
+            SetCursor((Width / 2) - title.Length, 0);
+            Write(title, ConsoleColor.White, ConsoleColor.Green);
+            SetCursor(x, y);
         }
 
         public static void FillScreen(ConsoleColor color) {
@@ -204,6 +217,221 @@ namespace MegaOS {
 
         public static void SetCursor(int x,int y) {
             Console.SetCursorPosition(x, y);
+        }
+
+
+
+        public static void DrawPointC(int x, int y, char c,ConsoleColor color) {
+            (int l, int t) = GetCursor();
+            SetCursor(x, y);
+            SetBGColor(color);
+            Write(c.ToString());
+            SetCursor(l, t);
+            RestoreBG();
+        }
+
+        public static string DrawDialogWithTextField(int pw, int ph, string title,ConsoleColor bg,ConsoleColor fg, string message, string initialInput = "", bool hide = false) {
+            (int l, int t) = Console.GetCursorPosition();
+            int w = Width;
+            int h = Height;
+            bool dialog = true;
+            int cx = w / 2;
+            int cy = h / 2;
+            int x1 = Math.Max(0, cx - pw);
+            int x2 = Math.Min(Width - 1, cx + pw);
+            int y1 = Math.Max(0, cy - ph);
+            int y2 = Math.Min(Height - 1, cy + ph);
+            int dashes = Math.Max(1, pw - title.Length + 1);
+            int m = pw % 2;
+
+            DrawLineH(DialogTop, x1, y1, x2);
+            for (int i = y1 + 1; i < y2; i++) {
+                DrawLineH(bg, x1, i, x2);
+            }
+
+            // window top
+            DrawDialogTop(x1, x2, y1, cx, title);
+
+            int messageX = cx - message.Length / 2;
+            int messageY = cy - 3;
+
+            // Check if the message fits within the dialog, adjust if necessary
+            if (messageX < x1) {
+                messageX = x1;
+            } else if (messageX + message.Length > x2) {
+                messageX = x2 - message.Length;
+            }
+
+            // message
+            Write(messageX, messageY, message, fg, bg);
+
+            DrawLineH(bg, x1 + (cx - 2), y2 - 1, x2 - (cx - 2));
+
+
+            // Input field rendering
+            int inputFieldWidth = pw - 4; // Width excluding borders
+            int inputFieldX = cx - inputFieldWidth / 2; // Center the text box horizontally
+            int inputFieldY = messageY + 2; // Shift the text box below the message
+
+            // Render the input field
+            DrawTextBoxBorder(inputFieldX, inputFieldY - 1, inputFieldX + inputFieldWidth, inputFieldY + 1,ConsoleColor.Black);
+            Write(inputFieldX + 1, inputFieldY - 1, new string(' ', inputFieldWidth),ConsoleColor.White, fg); // Clear previous content
+
+            int okButtonX = cx - " OK ".Length / 2;
+            int okButtonY = Math.Min(Height - 1, y2 - 2);
+
+            Write(okButtonX, okButtonY, " OK ",ConsoleColor.White,ConsoleColor.Black);
+
+            // Set cursor position inside the input field initially
+            Console.SetCursorPosition(inputFieldX + initialInput.Length / 2 + 1, inputFieldY);
+            while (dialog) {
+                UpdateTextBox(inputFieldX, inputFieldY - 1, inputFieldX + inputFieldWidth, inputFieldY + 1,ConsoleColor.White);
+                ConsoleKeyInfo key = Console.ReadKey(true);
+                string hidden = "";
+                if (char.IsLetterOrDigit(key.KeyChar) || char.IsPunctuation(key.KeyChar) || char.IsSymbol(key.KeyChar) || char.IsWhiteSpace(key.KeyChar)) {
+                    // Append the typed character to the input 
+                    if (!hide) {
+                        if (initialInput.Length < inputFieldWidth - 2)
+                            initialInput += key.KeyChar;
+                        // Render the updated input field
+                        Write(inputFieldX + 1, inputFieldY, initialInput, fg,ConsoleColor.Black);
+                    } else {
+                        if (initialInput.Length < inputFieldWidth - 2)
+                            initialInput += key.KeyChar;
+
+                        hidden = new string('*', initialInput.Length);
+                        // Render the updated input field
+                        Write(inputFieldX + 1, inputFieldY, hidden, fg,ConsoleColor.Black);
+                    }
+                } else if (key.Key == ConsoleKey.Backspace && initialInput.Length > 0) {
+                    if (!hide) {
+                        // Remove the last character when backspace is pressed
+                        initialInput = initialInput.Substring(0, initialInput.Length - 1);
+                        Write(inputFieldX + 1, inputFieldY, new string(' ', inputFieldWidth - 1),ConsoleColor.White,ConsoleColor.White);
+                        // Render the updated input field
+                        Write(inputFieldX + 1, inputFieldY, initialInput, fg,ConsoleColor.White);
+                    } else {
+                        initialInput = initialInput.Substring(0, initialInput.Length - 1);
+                        Write(inputFieldX + 1, inputFieldY, new string(' ', inputFieldWidth - 1),ConsoleColor.White,ConsoleColor.White);
+                        hidden = new string('*', initialInput.Length);
+                        Write(inputFieldX + 1, inputFieldY, hidden, fg,ConsoleColor.White);
+                    }
+                } else if (key.Key == ConsoleKey.Enter) {
+                    dialog = false;
+                    for (int i = y1; i < y2; i++) {
+                        DrawLineH(Background, x1, i, x2);
+                    }
+                }
+
+            }
+            Console.SetCursorPosition(l, t);
+            return initialInput;
+        }
+
+        public static void DrawDialog(int pw, int ph, string title,ConsoleColor bg,ConsoleColor fg, string message, string buttonText = "  ENTER  ") {
+            int w = Width;
+            int h = Height;
+            bool dialog = true;
+            int cx = w / 2;
+            int cy = h / 2;
+            int x1 = Math.Max(0, cx - pw);
+            int x2 = Math.Min(Width - 1, cx + pw);
+            int y1 = Math.Max(0, cy - ph);
+            int y2 = Math.Min(Height - 1, cy + ph);
+            int dashes = Math.Max(1, pw - title.Length + 1);
+            int m = pw % 0;
+
+            DrawLineH(DialogTop, x1, y1, x2);
+            for (int i2 = y1 + 1; i2 < y2; i2++) {
+                DrawLineH(bg, x1, i2, x2);
+            }
+
+            DrawDialogTop(x1, x2, y1, cx, title);
+
+            int messageX = cx - message.Length / 2;
+            int messageY = cy;
+
+            messageX = Math.Max(x1, messageX);
+
+            messageX = x1 + 1;
+
+            int i = 0;
+            for (int x = x1 + 1; x < x2 - 1; x++) {
+                if (string.IsNullOrEmpty(message) || i >= message.Length) break;
+                if (x >= x2) {
+                    x = x1 + 1;
+                    messageY++;
+                    DrawPointC(x, messageY, message[i], bg);
+                } else {
+                    DrawPointC(x, messageY, message[i], bg);
+                }
+                i++;
+            }
+
+            DrawLineH(bg, x1 + (cx - 2), y2 - 1, x2 - (cx - 2));
+
+            int okButtonX = cx - buttonText.Length / 2;
+            int okButtonY = Math.Min(Height - 1, y2 - 2);
+
+            Write(okButtonX, okButtonY, buttonText,ConsoleColor.White,ConsoleColor.Black);
+
+            while (dialog) {
+                ConsoleKeyInfo key = Console.ReadKey(true);
+                if (key.Key == ConsoleKey.Enter) {
+                    for (int j = y1; j < y2; j++) {
+                        DrawLineH(ConsoleColor.Black, x1, j, x2);
+                    }
+                    dialog = false;
+                }
+            }
+        }
+
+        private static void DrawTextBoxBorder(int x1, int y1, int x2, int y2,ConsoleColor color) {
+            for (int i = y1; i < y2; i++)
+                DrawLineH(color, x1, i, x2);
+
+
+            for (int i = x1; i < x2; i++) {
+                DrawPointC(i, y1, '-', color);
+                DrawPointC(i, y2, '-', color);
+            }
+
+            DrawPointC(x1, y1, '+', color);
+            DrawPointC(x2, y1, '+', color);
+            DrawPointC(x1, y2, '+', color);
+            DrawPointC(x2, y2, '+', color);
+            DrawPointC(x1, y1 + 1, '|', color);
+            DrawPointC(x2, y1 + 1, '|', color);
+
+        }
+
+        static void DrawDialogTop(int x1, int x2, int y, int cx, string title) {
+            for (int i = x1; i < x2; i++) {
+                DrawPointC(i, y, '-', DialogTop);
+            }
+
+            string t = $"[{title}]";
+            int idx = 0;
+            for (int i = cx - t.Length + 5; i < cx + t.Length + 5; i++) {
+                DrawPointC(i, y, t[idx], DialogTop);
+                idx++;
+            }
+        }
+
+        static void UpdateTextBox(int x1, int y1, int x2, int y2,ConsoleColor color) {
+            DrawLineH(color, x1, y2, x2);
+
+            for (int i = x1; i < x2; i++) {
+                DrawPointC(i, y1, '-', color);
+                DrawPointC(i, y2, '-', color);
+            }
+
+            DrawPointC(x1, y1, '+', color);
+            DrawPointC(x2, y1, '+', color);
+            DrawPointC(x1, y2, '+', color);
+            DrawPointC(x2, y2, '+', color);
+            DrawPointC(x1, y1 + 1, '|', color);
+            DrawPointC(x2, y1 + 1, '|', color);
         }
     }
 }
