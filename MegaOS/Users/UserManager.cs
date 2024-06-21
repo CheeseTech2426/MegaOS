@@ -98,7 +98,7 @@ namespace MegaOS {
             GL.SetCursor(0, 0);
             GL.Write(new string(' ', GL.Width), ConsoleColor.Blue, ConsoleColor.Blue);
             GL.SetCursor(0, 0);
-            GL.Write($"{CoreServices.fullVersionString} | Login", ConsoleColor.White, ConsoleColor.Blue);
+            GL.Write($"  {CoreServices.fullVersionString} | Login", ConsoleColor.White, ConsoleColor.Blue);
             GL.SetCursor(0, 3);
             LoadUsers();
             GL.SetCursor(0,9);

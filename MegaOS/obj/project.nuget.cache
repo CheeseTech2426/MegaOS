@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ypZuJngr0cKUmP54d8qG25m6iWFuBYV7dNthpGcZ2BVg3x3iTY37F1SE2CLj/NaWJWxP+R9ChNI4N9VlDCEYTA==",
+  "dgSpecHash": "t+PYH3yzX0NsatM4FBgTfUDoZqUz+VqGXn79HrFw6PL6M6WK3TFZQBK+dDnYSohFgYwpnQfNH2qPOTDDpTbb/Q==",
   "success": true,
   "projectFilePath": "D:\\Coding\\Visual Studio 2019\\MegaOS\\MegaOS\\MegaOS.csproj",
   "expectedPackageFiles": [
@@ -11,7 +11,20 @@
     "C:\\Users\\Eelis Louko\\.nuget\\packages\\cosmos.hal2\\0.1.0-localbuild20240130065925\\cosmos.hal2.0.1.0-localbuild20240130065925.nupkg.sha512",
     "C:\\Users\\Eelis Louko\\.nuget\\packages\\cosmos.plugs\\0.1.0-localbuild20240130065925\\cosmos.plugs.0.1.0-localbuild20240130065925.nupkg.sha512",
     "C:\\Users\\Eelis Louko\\.nuget\\packages\\cosmos.system2\\0.1.0-localbuild20240130065925\\cosmos.system2.0.1.0-localbuild20240130065925.nupkg.sha512",
-    "C:\\Users\\Eelis Louko\\.nuget\\packages\\il2cpu.api\\0.1.0-localbuild20240130065925\\il2cpu.api.0.1.0-localbuild20240130065925.nupkg.sha512"
+    "C:\\Users\\Eelis Louko\\.nuget\\packages\\cosmoshttp\\1.0.4\\cosmoshttp.1.0.4.nupkg.sha512",
+    "C:\\Users\\Eelis Louko\\.nuget\\packages\\il2cpu.api\\0.1.0-localbuild20240130065925\\il2cpu.api.0.1.0-localbuild20240130065925.nupkg.sha512",
+    "C:\\Users\\Eelis Louko\\.nuget\\packages\\zlib.portable\\1.11.0\\zlib.portable.1.11.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Zlib.Portable 1.11.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
+      "libraryId": "Zlib.Portable",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    }
+  ]
 }

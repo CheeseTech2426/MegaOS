@@ -29,6 +29,7 @@ namespace MegaOS.CMD
             commands.Add(new CMDCopy("cp", "Usage: cp [target] [destination] - Copies a file"));
             commands.Add(new CMDMove("mv", "Usage: cp [target] [destination] - Moves a file"));
             commands.Add(new CMDChangeLineInFile("ch", "Usage: ch [file] [line #] [new line] - Changes specific line in a file"));
+            commands.Add(new CMDEdit("edit", "MegaOS text editor"));
             commands.Add(new CMDNeofetch("neofetch", "A neofetch clone"));
             commands.Add(new CMDShutdown("shutdown", "Turns the computer off"));
             commands.Add(new CMDReboot("reboot", "Restarts the computer"));
@@ -111,6 +112,10 @@ namespace MegaOS.CMD
                     break;
                 case "dtrace":
                     core.Log("dtrace", LogType.PanicGraphical);
+                    break;
+                case "network":
+                    NetworkTest network = new NetworkTest();
+                    network.Run();
                     break;
                 default:
                     GL.WriteLine("Usage");
