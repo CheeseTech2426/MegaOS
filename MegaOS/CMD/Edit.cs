@@ -101,8 +101,7 @@ namespace MegaOS.CMD {
                         k.Key != sys.ConsoleKeyEx.UpArrow && 
                         k.Key != sys.ConsoleKeyEx.DownArrow &&
                         k.Modifiers != ConsoleModifiers.Alt && 
-                        k.Modifiers != ConsoleModifiers.Control &&
-                        k.Modifiers != ConsoleModifiers.Shift) {
+                        k.Modifiers != ConsoleModifiers.Control) {
                         text.Add(k.KeyChar);
                         Render(args);
                     }
